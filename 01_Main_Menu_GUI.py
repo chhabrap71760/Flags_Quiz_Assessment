@@ -34,26 +34,29 @@ class Main:
         self.main3_label.grid(row=2)
         
         # Easy & Expert Buttons go here... (row 4)
-        self.easy_expert_frame = Frame(self.main_frame)
+        self.easy_expert_frame = Frame(self.main_frame, bg=background_color)
         self.easy_expert_frame.grid(row=4, pady=10)
         
-        self.easy_button = Button(self.main_frame, text="Easy Mode",
+        self.easy_button = Button(self.easy_expert_frame, text="Easy Mode",
                                   font="Arial 12 bold",
-                                  bg="#FF9999") 
-                                # command=lambda do be added in future components
-        self.easy_button.grid(row=0, column=0)
+                                  bg="#FF9999",
+                                  borderwidth=2) 
+                                # command=lambda do be sadded in future components
+        self.easy_button.grid(row=0, column=0,)
 
         self.expert_button = Button(self.easy_expert_frame, text="Expert Mode",
                                     font="Arial 12 bold",
                                     width=9,
-                                    bg="#FF0000")
+                                    bg="#FF0000",
+                                    borderwidth=2)
                                     # command=lambda do be added in future components
         self.expert_button.grid(row=0, column=1)
 
         # Help/ Instructions buttons go here... (row 5)
-        self.help_button = Button(self.easy_expert_frame, text="Help/Instructions",
+        self.help_button = Button(self.main_frame, text="Help/Instructions",
                                   font="Arial 12 bold",
-                                  bg="#66B2FF")
+                                  bg="#66B2FF",
+                                  borderwidth=2,)
                                   # command=lambda do be added in future components
         self.help_button.grid(row=5, column=0)  
 
