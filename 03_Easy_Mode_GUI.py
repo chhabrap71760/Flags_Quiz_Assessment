@@ -52,6 +52,8 @@ class Easy:
                                  font="arial 20 bold", bg=background_color)
         self.easy_heading.grid(row=0)
 
+        
+
 
 
 # main routine

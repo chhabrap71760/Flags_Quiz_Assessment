@@ -56,13 +56,14 @@ class Help:
         self.help_heading.grid(row=0)
 
         help_text = '''  \t      Greetings fellow user... Welcome aboard to the flags of the  
-                       world quiz. This program is to build up knowledge/skills in          \t
+                       world quiz where you get to build up your knowledge/skills in          \t
                        recognising flags.   \t
 
                        In our Main Menu you can either click the Easy mode where            \t
                        you will be given options when answering the questions; Or           \t
                        you could either click the Expert Mode where you will have       
-                       to guess the flag yourself without any options nor hints.
+                       to guess the flag yourself without any options but you will 
+                       get the chance to view hints to help you out.
 
                        After playing a couple games you can click the stats button
                        and view your statistics of the rounds you've played. And if 
@@ -79,7 +80,7 @@ class Help:
 
          # Dismiss button (row 2)
         self.dismiss_btn = Button(self.help_frame, text="Dismiss",
-                                  bg="#FF0000", font="arial 10 bold",
+                                  bg="#CC0000", font="arial 10 bold",
                             command=partial(self.close_help, partner))
         self.dismiss_btn.grid(row=2, pady=10)
 
