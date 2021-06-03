@@ -55,13 +55,12 @@ class Help:
                                  font="arial 20 bold", bg=background_color)
         self.help_heading.grid(row=0)
 
-        help_text = '''  \t      Greetings fellow user... Welcome aboard to the flags of the  
-                       world quiz where you get to build up your knowledge/skills in          \t
-                       recognising flags.   \t
+        help_text = '''     \t         Greetings fellow user... Welcome aboard to the flags of the  
+                       world quiz where you get to build up your knowledge/skills in      \t    
+                       recognising flags.  \t
 
-                       In our Main Menu you can either click the Easy mode where            \t
-                       you will be given options when answering the questions; Or           \t
-                       you could either click the Expert Mode where you will have       
+                       In our Main Menu you can either click the Easy mode where           \t 
+                       you could either click the Expert Mode where you will have           \t
                        to guess the flag yourself without any options but you will 
                        get the chance to view hints to help you out.
 
@@ -75,12 +74,13 @@ class Help:
 
         # Help Text (label, row 1)
         self.help_text = Label(self.help_frame, text=help_text, bg=background_color,
+                                font="Arial 10",
                                justify=LEFT, padx=10, pady=10)
-        self.help_text.grid(row=1, column=0,)
+        self.help_text.grid(row=1, column=0)
 
          # Dismiss button (row 2)
         self.dismiss_btn = Button(self.help_frame, text="Dismiss",
-                                  bg="#CC0000", font="arial 10 bold",
+                                  bg="#CC0000", font="arial 10 bold", width=15,
                             command=partial(self.close_help, partner))
         self.dismiss_btn.grid(row=2, pady=10)
 
