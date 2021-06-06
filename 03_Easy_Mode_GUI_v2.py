@@ -69,16 +69,12 @@ class Easy:
         
         with open("country_flags.csv") as f: #  change variable name
             
-            row_num = 1
-
             reader = csv.reader(f)
             for index, row in enumerate(reader):
                 if index == 0:
                     chosen_row = row
                 else:
-                    # b = random.randint(0, index) # change variable name asap
-                    row_num += 1
-                    b = row_num
+                    b = random.randint(0, index) # change variable name asap
                     if b == 0:
                         chosen_row = row
                     

@@ -4,9 +4,6 @@ import re
 import random
 import csv
 
-country_flags = open("country_flags.csv")
-read = csv.reader(country_flags)
-
 
 class Main:
     def __init__(self):
@@ -25,13 +22,14 @@ class Main:
                             bg=background_color)
         self.main_label.grid(row=0)
 
-        # easy mode button go here... (row 5)
+        # easy buttons go here... (row 5)
         self.easy_button = Button(self.main_frame, text="Easy Mode",
                                   font="Arial 12 bold",
                                   bg="#FF9999",
                                   borderwidth=2,
                                   command=self.easy)
         self.easy_button.grid(row=5, column=0)  
+
 
     def easy(self):
         Easy(self)
@@ -60,48 +58,48 @@ class Easy:
                                  font="arial 20 bold", bg=background_color)
         self.easy_heading.grid(row=0)
 
+        easy_text = "What is this flag?"
 
-    def easygame(): # change this name asap!!!
-        countries = country_list()
-        flags = flag_list()
-        used = [False] * 200
+        # Help Text (label, row 1)
+        self.easy_text = Label(self.easy_frame, text=easy_text, bg=background_color,
+                                font="Arial 10",
+                               justify=LEFT, padx=10, pady=10)
+        self.easy_text.grid(row=1, column=0) 
 
-        # Randomly generate the flag
-        index = random.randint(0, 200)
-        while used[index]:
-            index = random.randint(0,200)
-        used[index] = True
-        alltrue = True
-        for variable in range(0,200): # change variable name in due course
-            if used[variable] == False:
-                allTrue = False
-            if alltrue:
-                used = [False] * 200
-            flag = flags[index]
-            country = countries[flag]
+        
+        with open("country_flags.csv") as f: #  change variable name
+            
+            row_num = 1
 
-            print("{}".format(flag))
-            print("{}".format(country))
+            reader = csv.reader(f)
+            for index, row in enumerate(reader):
+                if index == 0:
+                    chosen_row = row
+                else:
+                    # b = random.randint(0, index) # change variable name asap
+                    row_num += 1
+                    b = row_num
+                    if b == 0:
+                        chosen_row = row
+                    
+                    print(chosen_row)
 
+                    flag_image = chosen_row[3:5]
+                    print(flag_image)
+            
+                    image_to_use = "flag_images\\" + flag_image[0]
+                    print(image_to_use)
+                    image = PhotoImage(file=image_to_use)
 
-    # Generate country list
-    def country_list():
-        with open(country_flags, "countries") as country:
-            list = csv.reader(country)
-            Countries = []
-            for row in list:
-                Countries.append(row[0])
-            return Countries
+        self.picture_label.config(images=image)
+        self.picture_label.photo = image
 
-    # Generate flag list
-    def flag_list():
-       with open(country_flags, "flags") as flag:
-           chosen_row = csv.reader(flag)
-           flags = {}
-           for row in chosen_row:
-                k, v = row
-                flags[k] = v
-           return flags 
+        self.picture_label = Label(self.easy_frame, text="?\n", font="Arial 21 bold",
+                                  image=image,
+                                  padx=10, pady=10)
+        self.picture_label.photo = image
+        self.picture_label.grid(row=0, column=0)
+
 
     def close_easy(self, partner):
         # Put help button back to normal
@@ -109,11 +107,10 @@ class Easy:
         self.easy_box.destroy()
 
 
-
 # main routine
 if __name__ == "__main__":
     root = Tk()
     root.title("Flag Quiz Game")
-    something = Main()
+    something = Main()  
     root.mainloop()
 
