@@ -69,36 +69,32 @@ class Easy:
         
         with open("country_flags.csv") as f: #  change variable name
             
-            row_num = 1
-
             reader = csv.reader(f)
             for index, row in enumerate(reader):
                 if index == 0:
                     chosen_row = row
                 else:
-                    # b = random.randint(0, index) # change variable name asap
-                    row_num += 1
-                    b = row_num
+                    b = random.randint(0, index) # change variable name asap
                     if b == 0:
                         chosen_row = row
                     
-                    print(chosen_row)
-
                     flag_image = chosen_row[3:5]
-                    print(flag_image)
-            
-                    image_to_use = "flag_images\\" + flag_image[0]
-                    print(image_to_use)
-                    image = PhotoImage(file=image_to_use)
+                    flag_ans = chosen_row[0]
+                    print(flag_ans)
 
-        self.picture_label.config(images=image)
-        self.picture_label.photo = image
+                    image_to_use = "flag_images\\" + flag_image[0]
+
+                    flag_image = PhotoImage(file=image_to_use)
 
         self.picture_label = Label(self.easy_frame, text="?\n", font="Arial 21 bold",
-                                  image=image,
+                                  image=flag_image,
                                   padx=10, pady=10)
-        self.picture_label.photo = image
+        
+        self.picture_label.photo = flag_image
         self.picture_label.grid(row=0, column=0)
+
+        self.picture_label.config(images=flag_image)
+        self.picture_label.photo = flag_image
 
 
     def close_easy(self, partner):

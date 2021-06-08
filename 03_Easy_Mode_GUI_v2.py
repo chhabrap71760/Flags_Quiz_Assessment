@@ -35,7 +35,6 @@ class Main:
         Easy(self)
 
 class Easy:
-
     def __init__(self, partner):
 
         background_color = "#FFE6CC"
@@ -67,34 +66,37 @@ class Easy:
         self.easy_text.grid(row=1, column=0) 
 
         
-        with open("country_flags.csv") as f: #  change variable name
-            
+        with open("country_flags.csv", newline = '') as f: #  change variable name
             reader = csv.reader(f)
-            for index, row in enumerate(reader):
-                if index == 0:
-                    chosen_row = row
-                else:
-                    b = random.randint(0, index) # change variable name asap
-                    if b == 0:
-                        chosen_row = row
-                    
-                    print(chosen_row)
+            flag_list = list(reader)
 
-                    flag_image = chosen_row[3:5]
-                    print(flag_image)
-            
-                    image_to_use = "flag_images\\" + flag_image[0]
-                    print(image_to_use)
-                    image = PhotoImage(file=image_to_use)
+        print(flag_list)
 
-        self.picture_label.config(images=image)
-        self.picture_label.photo = image
+        for item in range(0,4):
+            chosen_country = random.choice(flag_list)
+
+            country_name = chosen_country[0]
+            country_flag = chosen_country[-1]
+
+            print("country name: ", country_name)
+            print("country flag: ", country_flag)
+
+
+            image_to_use = "flag_images\\" + country_flag[0]
+
+            flag_image = PhotoImage(file=image_to_use)
+
+            input()
 
         self.picture_label = Label(self.easy_frame, text="?\n", font="Arial 21 bold",
-                                  image=image,
+                                  image=flag_image,
                                   padx=10, pady=10)
-        self.picture_label.photo = image
+        
+        self.picture_label.photo = flag_image
         self.picture_label.grid(row=0, column=0)
+
+        self.picture_label.config(image=flag_image)
+        self.picture_label.photo = flag_image
 
 
     def close_easy(self, partner):
