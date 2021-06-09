@@ -35,6 +35,7 @@ class Main:
         Easy(self)
 
 class Easy:
+
     def __init__(self, partner):
 
         background_color = "#FFE6CC"
@@ -66,27 +67,17 @@ class Easy:
         self.easy_text.grid(row=1, column=0) 
 
         
-        with open("country_flags.csv", newline = '') as f: #  change variable name
+        with open("country_flags.csv") as f: #  change variable name
+            
             reader = csv.reader(f)
             flag_list = list(reader)
 
-        # print(flag_list)
+        chosen_country = random.choice(flag_list)
 
-        for chosen_country in range(0,4):
-            chosen_country = random.choice(flag_list)
+        image_to_use = "flag_images\\" + chosen_country[-1]
 
-            country_name = chosen_country[0]
-            country_flag = chosen_country[-1]
-
-            print("country name: ", country_name)
-            print("country flag: ", country_flag)
-
-            image_to_use = "flag_images\\" + chosen_country[-1]
-
-            flag_image = PhotoImage(file=image_to_use)
-
-            input() 
-
+        flag_image = PhotoImage(file=image_to_use)
+ 
         self.picture_label = Label(self.easy_frame, text="?\n", font="Arial 21 bold",
                                   image=flag_image,
                                   padx=10, pady=10)
@@ -94,7 +85,7 @@ class Easy:
         self.picture_label.photo = flag_image
         self.picture_label.grid(row=0, column=0)
 
-        self.picture_label.config(image=flag_image)
+        self.picture_label.config(images=flag_image)
         self.picture_label.photo = flag_image
 
 

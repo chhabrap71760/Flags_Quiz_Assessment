@@ -79,13 +79,13 @@ class Easy:
                         chosen_row = row
                     
                     flag_image = chosen_row[3:5]
-                    flag_ans = chosen_row[0]
-                    print(flag_ans)
+                    flag_ans = chosen_row[0] # These two lines print out the loop 
+                    print(flag_ans)          # when trying to get the answer which is insufficent
 
                     image_to_use = "flag_images\\" + flag_image[0]
 
                     flag_image = PhotoImage(file=image_to_use)
-
+ 
         self.picture_label = Label(self.easy_frame, text="?\n", font="Arial 21 bold",
                                   image=flag_image,
                                   padx=10, pady=10)
