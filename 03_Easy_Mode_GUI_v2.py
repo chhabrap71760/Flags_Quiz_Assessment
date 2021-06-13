@@ -73,7 +73,7 @@ class Easy:
             flag_list = list(reader)
 
         chosen_country = random.choice(flag_list)
-
+        
         image_to_use = "flag_images\\" + chosen_country[-1]
 
         flag_image = PhotoImage(file=image_to_use)
@@ -89,16 +89,27 @@ class Easy:
         self.picture_label.config(image=flag_image)
         self.picture_label.photo = flag_image
 
-    def answer(self):
+    
 
-        with open("country_flags.csv") as f:
-
+        with open('country_flags.csv', newline='') as f:
             reader = csv.reader(f)
             flag_list = list(reader)
+        list_of_countries = []
+        country_option = []
+        for item in range(0,3):
+            options = random.choice(flag_list)
+            country_option = options[0]
+          #  print(country_option)
+        
+        flag_answer = chosen_country[0]
+       # print(flag_answer)
+        
+        list_of_countries.append(country_option)
+        list_of_countries.append(flag_answer)
 
-        country_list = [flag_list,[0]]
-        print(country_list)
+        print('list_of_countries{}'.format(flag_answer))
 
+        print(list_of_countries)
 
     def close_easy(self, partner):
         # Put help button back to normal

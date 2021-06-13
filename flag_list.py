@@ -4,8 +4,7 @@ import random
 with open('country_flags.csv', newline='') as f:
     reader = csv.reader(f)
     flag_list = list(reader)
-
-#print(flag_list)
+print(flag_list)
 
 for item in range(0,4):
     chosen_country = random.choice(flag_list)
@@ -17,9 +16,10 @@ for item in range(0,4):
     print("country name: ", country_name)
     print("country flag: ", country_flag)
 
-for row in flag_list:
-    country_list[row[0]]
 
-print(country_list)
+# choose countries
 
-    input()
+for item in range(0,3):
+    option = random.choice(flag_list)
+    country_option = option[0]
+    print(country_option)
