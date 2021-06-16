@@ -41,7 +41,7 @@ class Main:
                                   font="Arial 12 bold",
                                   bg="#FF9999",
                                   borderwidth=2) 
-                                # command=lambda do be sadded in future components
+                                # command=lambda do be added in future components
         self.easy_button.grid(row=0, column=0,)
 
         self.expert_button = Button(self.easy_expert_frame, text="Expert Mode",

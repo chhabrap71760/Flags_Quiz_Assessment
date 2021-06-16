@@ -18,8 +18,11 @@ for item in range(0,4):
 
 
 # choose countries
-
 for item in range(0,3):
     option = random.choice(flag_list)
+    country_option = []
     country_option = option[0]
     print(country_option)
+
+
+ 
