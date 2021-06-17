@@ -22,48 +22,48 @@ class Main:
                             bg=background_color)
         self.main_label.grid(row=0)
 
-        # easy buttons go here... (row 5)
-        self.easy_button = Button(self.main_frame, text="Easy Mode",
+        # expert button goes here... (row 5)
+        self.expert_button = Button(self.main_frame, text="Expert Mode",
                                   font="Arial 12 bold",
-                                  bg="#FF9999",
+                                  bg="#FF0000",
                                   borderwidth=2,
-                                  command=self.easy)
-        self.easy_button.grid(row=5, column=0)  
+                                  command=self.expert)
+        self.expert_button.grid(row=5, column=0)  
 
 
-    def easy(self):
-        Easy(self)
+    def expert(self):
+        Expert(self)
 
-class Easy:
+class Expert:
 
     def __init__(self, partner):
 
         background_color = "#FFE6CC"
 
-        # disable easy button
-        partner.easy_button.config(state=DISABLED)
+        # disable expert button
+        partner.expert_button.config(state=DISABLED)
 
         # Sets up child window (ie: help box)
-        self.easy_box = Toplevel()
+        self.expert_box = Toplevel()
 
         # if users press cross at top, closes help and 'releases' help button
-        self.easy_box.protocol('WM_DELETE_WINDOW', partial(self.close_easy, partner))
+        self.expert_box.protocol('WM_DELETE_WINDOW', partial(self.close_expert, partner))
 
         # Set up GUI Frame
-        self.easy_frame = Frame(self.easy_box, bg=background_color)
-        self.easy_frame.grid()
+        self.expert_frame = Frame(self.expert_box, bg=background_color)
+        self.expert_frame.grid()
 
          # Set up Help heading (row 0)
-        self.easy_heading = Label(self.easy_frame, text="Easy Mode",
+        self.expert_heading = Label(self.expert_frame, text="expert Mode",
                                  font="arial 20 bold", bg=background_color,
                                  padx=10, pady=10)
-        self.easy_heading.grid(row=0, column=0,)
+        self.expert_heading.grid(row=0, column=0,)
 
         # Help Text (label, row 1)
-        self.easy_text = Label(self.easy_frame, text="Round 1", bg=background_color,
+        self.expert_text = Label(self.expert_frame, text="Round 1", bg=background_color,
                                 font="Arial 13 bold",
                                justify=LEFT, padx=10, pady=10)
-        self.easy_text.grid(row=2, column=0) 
+        self.expert_text.grid(row=2, column=0) 
 
         with open("country_flags.csv") as f: #  change variable name
             
@@ -77,7 +77,7 @@ class Easy:
         flag_image = PhotoImage(file=image_to_use)
        
         # Flag Image label
-        self.picture_label = Label(self.easy_frame, text="?\n", font="Arial 21 bold",
+        self.picture_label = Label(self.expert_frame, text="?\n", font="Arial 21 bold",
                                   image=flag_image,
                                   padx=10, pady=10)
         
@@ -106,40 +106,12 @@ class Easy:
         random.shuffle(list_of_countries)
         print(list_of_countries)
 
-    # Mutliple choices frame
-        self.multiple_choices = Frame(self.easy_frame, bg=background_color)
-        self.multiple_choices.grid(row=3, pady=15)
+        # Answer Entry Box frame goes here
+        self.entry_hint = Frame
 
-        self.country_1 = Button(self.multiple_choices, text = list_of_countries[0],
-                                font="Arial 12 bold",
-                                bg = "#E6E6E6",
-                                borderwidth = 2,
-                                width=15)
-        self.country_1.grid(row=3, column=0, padx=5, pady=5)
-
-        self.country_2 = Button(self.multiple_choices, text = list_of_countries[1],
-                                font="Arial 12 bold",
-                                bg = "#E6E6E6",
-                                borderwidth = 2,
-                                width=15)
-        self.country_2.grid(row=3, column=1, padx=5, pady=5)
-
-        self.country_3 = Button(self.multiple_choices, text = list_of_countries[2],
-                                font="Arial 12 bold",
-                                bg = "#E6E6E6",
-                                borderwidth = 2,
-                                width=15)
-        self.country_3.grid(row=4, column=0, padx=5, pady=5)
-
-        self.country_4 = Button(self.multiple_choices, text = list_of_countries[3],
-                                font="Arial 12 bold",
-                                bg = "#E6E6E6",
-                                borderwidth = 2,
-                                width=15)
-        self.country_4.grid(row=4, column=1, padx=5, pady=5)
 
         # Help/Stats Frame goes here
-        self.help_stats_frame = Frame(self.easy_frame, bg=background_color)
+        self.help_stats_frame = Frame(self.expert_frame, bg=background_color)
         self.help_stats_frame.grid(row=5, pady=15)
 
         # Help and stats buttons go here (row 4)
@@ -160,10 +132,10 @@ class Easy:
         self.stats_button.grid(row=5, column=1, padx=10, pady=15)
 
 
-    def close_easy(self, partner):
+    def close_expert(self, partner):
         # Put help button back to normal
-        partner.easy_button.config(state=NORMAL)
-        self.easy_box.destroy()
+        partner.expert_button.config(state=NORMAL)
+        self.expert_box.destroy()
 
 
     def help(self):
@@ -197,7 +169,7 @@ class Help:
                        world quiz where you get to build up your knowledge/skills in      \t    
                        recognising flags.  \t
 
-                       In our Main Menu you can either click the Easy mode where you
+                       In our Main Menu you can either click the expert mode where you
                        get given mutliple choices to help you guess the flag or you 
                        could either click the Expert Mode where you will have           \t
                        to guess the flag yourself without any options but you will 
