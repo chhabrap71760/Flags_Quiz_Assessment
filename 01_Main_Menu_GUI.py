@@ -41,7 +41,7 @@ class Main:
                                   font="Arial 12 bold",
                                   bg="#FF9999",
                                   borderwidth=2) 
-                                # command=lambda do be added in future components
+                                # command=lambda do be sadded in future components
         self.easy_button.grid(row=0, column=0,)
 
         self.expert_button = Button(self.easy_expert_frame, text="Expert Mode",
@@ -56,7 +56,7 @@ class Main:
         self.help_button = Button(self.main_frame, text="Help/Instructions",
                                   font="Arial 12 bold",
                                   bg="#66B2FF",
-                                  borderwidth=2,)
+                                  borderwidth=2)
                                   # command=lambda do be added in future components
         self.help_button.grid(row=5, column=0)  
 

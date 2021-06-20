@@ -46,7 +46,6 @@ class Expert:
         # Sets up child window (ie: help box)
         self.expert_box = Toplevel()
 
-        # if users press cross at top, closes help and 'releases' help button
         self.expert_box.protocol('WM_DELETE_WINDOW', partial(self.close_expert, partner))
 
         # Set up GUI Frame
@@ -54,7 +53,7 @@ class Expert:
         self.expert_frame.grid()
 
          # Set up Help heading (row 0)
-        self.expert_heading = Label(self.expert_frame, text="expert Mode",
+        self.expert_heading = Label(self.expert_frame, text="Expert Mode",
                                  font="arial 20 bold", bg=background_color,
                                  padx=10, pady=10)
         self.expert_heading.grid(row=0, column=0,)
@@ -106,9 +105,38 @@ class Expert:
         random.shuffle(list_of_countries)
         print(list_of_countries)
 
-        # Answer Entry Box frame goes here
-        self.entry_hint = Frame
+        # Answer Entry Box frame goes here (row 3)
+        self.entry_hint = Frame(self.expert_frame, bg=background_color)
+        self.entry_hint.grid(row=3, pady=15)
 
+        # Entry Box goes here (row 3)
+        self.enter_answer = Entry(self.entry_hint,
+                                  font="Arial 15 bold", width=13)
+        self.enter_answer.grid(row=3, column=0)
+
+        # Enter Button goes here (row 3)
+        self.entry_button = Button(self.entry_hint, text="Enter",
+                                   font="Arial 12 bold",
+                                   bg="#EA6B66",
+                                   borderwidth=2,
+                                   width=8,
+                                   command=self.answer)
+        self.entry_button.grid(row=3, column=1)
+
+        # Hint Button goes here (Row 3)
+        self.hint_button = Button(self.entry_hint, text="Hint",
+                                  font="Arial 12 bold",
+                                  bg="#FFFF00",
+                                  borderwidth=2,
+                                  width=8,
+                                  #command hint)
+        )
+        self.hint_button.grid(row=3, column=2, padx=15)
+
+        self.entry_error = Label(self.entry_hint, fg="maroon", bg = background_color,
+                                 text="", font="Arial 10 bold", wrap=275,
+                                 justify=LEFT)
+        self.entry_error.grid(row=4, columnspan=2, pady=5)
 
         # Help/Stats Frame goes here
         self.help_stats_frame = Frame(self.expert_frame, bg=background_color)
@@ -131,9 +159,28 @@ class Expert:
                                   width=8)
         self.stats_button.grid(row=5, column=1, padx=10, pady=15)
 
+    def answer(self):
+        with open("country_flags.csv") as f:
+
+            reader = csv.reader(f)
+            flag_list = list(reader)
+
+        chosen_country = random.choice(flag_list)
+
+        flag_answer = chosen_country[0]
+
+        answer_entered = self.enter_answer.get()
+
+        error_back = "#ffafaf"
+
+        
+        if answer_entered == flag_answer:
+            print("lesgho")
+
+        else:
+            print("nah")
 
     def close_expert(self, partner):
-        # Put help button back to normal
         partner.expert_button.config(state=NORMAL)
         self.expert_box.destroy()
 

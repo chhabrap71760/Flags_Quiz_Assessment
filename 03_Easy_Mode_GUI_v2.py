@@ -30,7 +30,6 @@ class Main:
                                   command=self.easy)
         self.easy_button.grid(row=5, column=0)  
 
-
     def easy(self):
         Easy(self)
 
@@ -43,27 +42,26 @@ class Easy:
         # disable easy button
         partner.easy_button.config(state=DISABLED)
 
-        # Sets up child window (ie: help box)
+        # Sets up child window
         self.easy_box = Toplevel()
 
-        # if users press cross at top, closes help and 'releases' help button
         self.easy_box.protocol('WM_DELETE_WINDOW', partial(self.close_easy, partner))
 
         # Set up GUI Frame
         self.easy_frame = Frame(self.easy_box, bg=background_color)
         self.easy_frame.grid()
 
-         # Set up Help heading (row 0)
+         # Set up Easy Mode heading (row 0)
         self.easy_heading = Label(self.easy_frame, text="Easy Mode",
                                  font="arial 20 bold", bg=background_color,
                                  padx=10, pady=10)
         self.easy_heading.grid(row=0, column=0,)
 
-        # Help Text (label, row 1)
-        self.easy_text = Label(self.easy_frame, text="Round 1", bg=background_color,
+        # Rounds Text
+        self.round_text = Label(self.easy_frame, text="Round 1", bg=background_color,
                                 font="Arial 13 bold",
                                justify=LEFT, padx=10, pady=10)
-        self.easy_text.grid(row=2, column=0) 
+        self.round_text.grid(row=2, column=0) 
 
         with open("country_flags.csv") as f: #  change variable name
             
@@ -79,7 +77,7 @@ class Easy:
         # Flag Image label
         self.picture_label = Label(self.easy_frame, text="?\n", font="Arial 21 bold",
                                   image=flag_image,
-                                  padx=10, pady=10)
+                                  padx=10, pady=10,)
         
         self.picture_label.photo = flag_image
         self.picture_label.grid(row=1, column=0, padx=30)
