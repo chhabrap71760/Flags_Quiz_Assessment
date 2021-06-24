@@ -40,6 +40,8 @@ class Expert:
 
         background_color = "#FFE6CC"
 
+        self.correct_ans = StringVar()
+
         # disable expert button
         partner.expert_button.config(state=DISABLED)
 
@@ -64,14 +66,16 @@ class Expert:
                                justify=LEFT, padx=10, pady=10)
         self.expert_text.grid(row=2, column=0) 
 
-        with open("country_flags.csv") as f: #  change variable name
+        # with open("country_flags.csv") as f: #  change variable name
             
-            reader = csv.reader(f)
-            flag_list = list(reader)
+        #     reader = csv.reader(f)
+        #     flag_list = list(reader)
 
-        chosen_country = random.choice(flag_list)
+        # chosen_country = random.choice(flag_list)
         
-        image_to_use = "flag_images\\" + chosen_country[-1]
+        # image_to_use = "flag_images\\" + chosen_country[-1]
+        image_to_use = "flag_images\\NZ-flag.gif"
+
 
         flag_image = PhotoImage(file=image_to_use)
        
@@ -95,8 +99,8 @@ class Expert:
         #     #print(country_option)
         #     list_of_countries.append(country_option)
         
-       # flag_answer = chosen_country[0]
-        #print(flag_answer)
+        # flag_answer = chosen_country[0]
+        # print(flag_answer)
 
         # list_of_countries.append(flag_answer)
 
@@ -115,7 +119,7 @@ class Expert:
         self.enter_answer.grid(row=3, column=0)
 
         # Enter Button goes here (row 3)
-        self.entry_button = Button(self.entry_hint, text="Enter",
+        self.entry_button = Button(self.entry_hint, text="Check",
                                    font="Arial 12 bold",
                                    bg="#EA6B66",
                                    borderwidth=2,
@@ -138,6 +142,8 @@ class Expert:
                                  justify=LEFT)
         self.entry_error.grid(row=4, columnspan=2, pady=5)
 
+
+
         # Help/Stats Frame goes here
         self.help_stats_frame = Frame(self.expert_frame, bg=background_color)
         self.help_stats_frame.grid(row=5, pady=15)
@@ -158,15 +164,44 @@ class Expert:
                                   width=8)
         self.stats_button.grid(row=5, column=1, padx=10, pady=15)
 
-    def answer(self):
-        with open("country_flags.csv") as f:
+        # Next button goes here (row 4)
+        self.next_button = Button(self.help_stats_frame, text="Next",
+                                  font="Arial 12 bold",
+                                  bg="#EA6B66",
+                                  borderwidth=2,
+                                  width=8,
+                                  command=self.next)
+        self.next_button.grid(row=6, column=2, padx=10, pady=15, sticky="e")
 
+    def next(self):
+        with open("country_flags.csv") as f: #  change variable name
+            
             reader = csv.reader(f)
             flag_list = list(reader)
 
         chosen_country = random.choice(flag_list)
+        self.correct_ans.set(chosen_country)
 
-        flag_answer = chosen_country[0]
+        image_to_use = "flag_images\\" + chosen_country[-1]
+        flag_image = PhotoImage(file=image_to_use)
+
+        self.picture_label.config(image=flag_image)
+        self.picture_label.photo = flag_image
+
+    def answer(self):
+        # with open("country_flags.csv") as f:
+
+        #     reader = csv.reader(f)
+        #     flag_list = list(reader)
+
+        # chosen_country = random.choice(flag_list)
+
+        # flag_answer = chosen_country[0]
+        # print(chosen_country)
+
+        chosen_country = self.correct_ans.get()
+        #print(chosen_country)
+
 
         correct = ["Bravo! you got it right", "Awesome keep it up", "Excellent Work",
          "You're Great", "Outstanding"]
@@ -177,7 +212,7 @@ class Expert:
         correct = random.choice(correct)
         incorrect = random.choice(incorrect)
 
-        self.answer_entered = self.enter_answer.get()
+       # self.answer_entered = self.enter_answer.get()
 
         has_errors = "no"
 
@@ -185,16 +220,14 @@ class Expert:
         self.entry_error.config(text="")
 
         try:
-            answer_entered = str(self.answer_entered)
+            answer_entered = str(self.correct_ans.get())
 
-            print(answer_entered)
-            print(flag_answer)
 
-            if answer_entered == flag_answer:                
+            if answer_entered == chosen_country:                
                 has_errors = "no"
                 correct_feedback = correct
 
-            elif answer_entered != flag_answer:
+            elif answer_entered != chosen_country:
                 has_errors = "yes"
                 error_feedback = incorrect
 

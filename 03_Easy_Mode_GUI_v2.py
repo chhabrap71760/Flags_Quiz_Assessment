@@ -112,7 +112,8 @@ class Easy:
                                 font="Arial 12 bold",
                                 bg = "#E6E6E6",
                                 borderwidth = 2,
-                                width=15)
+                                width=15,
+                                command=self.answer)
         self.country_1.grid(row=3, column=0, padx=5, pady=5)
 
         self.country_2 = Button(self.multiple_choices, text = list_of_countries[1],
@@ -136,96 +137,88 @@ class Easy:
                                 width=15)
         self.country_4.grid(row=4, column=1, padx=5, pady=5)
 
+
+        self.entry_error = Label(self.multiple_choices, fg="maroon", bg = background_color,
+                                 text="", font="Arial 12 bold", wrap=275,
+                                 justify=LEFT)
+        self.entry_error.grid(row=5, columnspan=2, pady=5)
+
         # Help/Stats Frame goes here
         self.help_stats_frame = Frame(self.easy_frame, bg=background_color)
-        self.help_stats_frame.grid(row=5, pady=15)
+        self.help_stats_frame.grid(row=6, pady=15)
 
-        # Help and stats buttons go here (row 4)
+        # Help and stats buttons go here (row 6)
         self.help_button = Button(self.help_stats_frame, text="Help",
                                   font="Arial 12 bold",
                                   bg="#66B2FF",
                                   borderwidth=2,
-                                  width=8,
-                                  command=self.help)
-        self.help_button.grid(row=5, column=0, padx=10, pady=15)
+                                  width=8)
+        self.help_button.grid(row=6, column=0, padx=10, pady=15)
 
-        # Stats button goes here (row 4)
+        # Stats button goes here (row 6)
         self.stats_button = Button(self.help_stats_frame, text="Stats",
                                   font="Arial 12 bold",
                                   bg="#FF9933",
                                   borderwidth=2,
                                   width=8)
-        self.stats_button.grid(row=5, column=1, padx=10, pady=15)
+        self.stats_button.grid(row=6, column=1, padx=10, pady=15)
 
+    
+    def answer(self):
+        with open("country_flags.csv") as f:
+
+            reader = csv.reader(f)
+            flag_list = list(reader)
+
+        chosen_country = random.choice(flag_list)
+
+        flag_answer = chosen_country[0]
+
+        correct = ["Bravo! you got it right", "Awesome keep it up", "Excellent Work",
+         "You're Great", "Outstanding"]
+
+        incorrect = ["C'mon, you can do better than that", "Nope, try harder on the next one",
+        "oops, you messed up there"]
+
+        correct = random.choice(correct)
+        incorrect = random.choice(incorrect)
+
+        self.answer_entered = self.country_1
+
+        has_errors = "no"
+
+        # Change error back to blank
+        self.entry_error.config(text="")
+
+        try:
+            answer_entered = str(self.answer_entered)
+
+            print(answer_entered)
+            print(flag_answer)
+
+            if answer_entered == flag_answer:                
+                has_errors = "no"
+                correct_feedback = correct
+
+            elif answer_entered != flag_answer:
+                has_errors = "yes"
+                error_feedback = incorrect
+
+        except ValueError:
+            has_errors="yes"
+            error_feedback = "Please enter the country name"
+
+        if has_errors == "yes":
+            self.entry_error.config(text=error_feedback)
+        
+        elif has_errors == "no":
+            self.entry_error.config(text=correct_feedback)
 
     def close_easy(self, partner):
         # Put help button back to normal
         partner.easy_button.config(state=NORMAL)
         self.easy_box.destroy()
 
-
-    def help(self):
-        Help(self)
-
-class Help:
-
-    def __init__(self, partner):
-
-        background_color = "#FFE6CC"
-
-        # disable help button
-        partner.help_button.config(state=DISABLED)
-
-        # Sets up child window (ie: help box)
-        self.help_box = Toplevel()
-
-        # if users press cross at top, closes help and 'releases' help button
-        self.help_box.protocol('WM_DELETE_WINDOW', partial(self.close_help, partner))
-
-        # Set up GUI Frame
-        self.help_frame = Frame(self.help_box, bg=background_color)
-        self.help_frame.grid()
-
-         # Set up Help heading (row 0)
-        self.help_heading = Label(self.help_frame, text="Help / Instructions",
-                                 font="arial 20 bold", bg=background_color)
-        self.help_heading.grid(row=0)
-
-        help_text = '''     \t     Greetings fellow user... Welcome aboard to the flags of the  
-                       world quiz where you get to build up your knowledge/skills in      \t    
-                       recognising flags.  \t
-
-                       In our Main Menu you can either click the Easy mode where you
-                       get given mutliple choices to help you guess the flag or you 
-                       could either click the Expert Mode where you will have           \t
-                       to guess the flag yourself without any options but you will 
-                       get the chance to view the capital city of that country as a hint
-                       to help you out.
-
-                       After playing a couple games you can click the stats button
-                       and view your statistics of the rounds you've played. And if 
-                       want you can also export it into a text file and save it onto 
-                       your device so you can brag to your friends and family. 
-
-                       Good Luck... :)
-                    '''
-
-        # Help Text (label, row 1)
-        self.help_text = Label(self.help_frame, text=help_text, bg=background_color,
-                                font="Arial 12",
-                               justify=LEFT, padx=10, pady=10)
-        self.help_text.grid(row=1, column=0)
-
-         # Dismiss button (row 2)
-        self.dismiss_btn = Button(self.help_frame, text="Dismiss",
-                                  bg="#CC0000", font="arial 12 bold", width=10,
-                            command=partial(self.close_help, partner))
-        self.dismiss_btn.grid(row=2, pady=10)
-
-    def close_help(self, partner):
-        # Put help button back to normal
-        partner.help_button.config(state=NORMAL)
-        self.help_box.destroy()
 
 
 

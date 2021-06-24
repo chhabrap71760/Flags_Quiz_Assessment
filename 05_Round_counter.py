@@ -79,7 +79,7 @@ class Rounds:
                                  padx=10)
         self.round_heading.grid(row=0, column=0, sticky="nw")
 
-        rounds_text = "Enter the amount of round you'd like to play"
+        rounds_text = "Enter the amount of rounds you'd like to play"
 
         # Set up Round Counter text
         self.rounds_text = Label(self.round_frame, text=rounds_text, 
@@ -89,29 +89,40 @@ class Rounds:
                                 justify=LEFT, padx=10)
         self.rounds_text.grid(row=1, column=0)
 
-        self.enter_play = Frame(self.round_frame, bg=background_color)
-        self.enter_play.grid(row=2, column=0, sticky="w")
+        self.enter_check = Frame(self.round_frame, bg=background_color)
+        self.enter_check.grid(row=2, column=0, sticky="w")
 
         # Entry Box goes here (row 2)
-        self.enter_rounds = Entry(self.enter_play,
+        self.enter_rounds = Entry(self.enter_check,
                                   font="Arial 15 bold", width=10)
-        self.enter_rounds.grid(row=2, column=0, padx=10, sticky="w")
+        self.enter_rounds.grid(row=2, column=0, padx=5, sticky="w")
 
-        # play button goes here (row 2)
-        self.play_button = Button(self.enter_play, text="Play",
+        # check button goes here (row 2)
+        self.check_button = Button(self.enter_check, text="Check",
                                   font="Arial 12 bold",
-                                  bg="#EA6B66",
+                                  bg="#FFFF00",
                                   borderwidth=2,
                                   width=8,
                                   command=self.round_checker)
-        self.play_button.grid(row=2, column=1, padx=5)
+        self.check_button.grid(row=2, column=1)
 
         # Error Label goes here
-        self.play_error = Label(self.enter_play, fg="maroon",
+        self.play_error = Label(self.enter_check, fg="maroon",
                                 bg=background_color, text="", 
                                 font="Arial 10 bold", wrap=275,
                                 justify=LEFT)
-        self.play_error.grid(row=3, column=0, pady=3)
+        self.play_error.grid(row=3, column=0, padx=5, pady=10)
+
+        # Play Button Goes here (row 4)
+        self.play_button = Button(self.enter_check, text="Play",
+                                  font="Arial 12 bold",
+                                  bg="#EA6B66",
+                                  borderwidth=2,
+                                  width=14,
+                                  command=self.to_game)
+        self.play_button.grid(row=4, column=0, padx=5, pady=10)
+
+
 
     def round_checker(self):
         self.amount_entered = self.enter_rounds.get()
@@ -126,12 +137,12 @@ class Rounds:
         self.play_error.config(text="")
 
         # Disable play button just in case user changes mind
-        self.play_button.config(state=DISABLED)
+        #self.play_button.config(state=DISABLED)
 
         try:
             amount_entered = int(self.amount_entered)
 
-            if amount_entered < 0:
+            if amount_entered <= 0:
                 has_errors = "yes"
                 error_feedback = "NUMBER MUST BE ABOVE 0"
 
@@ -142,9 +153,10 @@ class Rounds:
             elif amount_entered > 0:
                 self.play_button.config(state=NORMAL)
         
+            
         except ValueError:
             has_errors = "yes"
-            error_feedback = "PLEASE DO NOT ENTER TEXT/DECIMALS"
+            error_feedback = "TEXT/DECIMALS ARE NOT VALID"
 
         if has_errors == "yes":
             self.enter_rounds.config(bg=error_back)
@@ -173,12 +185,6 @@ class Round_Testing:
 
         background_color = "#FFE6CC"
 
-        # disable easy button
-        partner.easy_button.config(state=DISABLED)
-
-        # Disable expert button
-        partner.expert_button.config(state=DISABLED)
-
         # Sets up child window
         self.round_box = Toplevel()
 
@@ -188,40 +194,36 @@ class Round_Testing:
 
         self.balance.set(amount_entered)
 
-        questions_played = 0
 
-        while questions_played < amount_entered:
+        # Set up GUI Frame
+        self.round_testing = Label(self.round_box, bg=background_color)
+        self.round_testing.grid()
 
-            # Set up GUI Frame
-            self.round_testing = Label(self.round_box, bg=background_color)
-            self.round_testing.grid()
-
-            # setup Heading
-            self.rounds_heading = Label(self.round_testing, text="Testing",
-                                        font="arial 20 bold", bg=background_color,
-                                        padx=10, pady=10)
-            self.rounds_heading.grid(row=0, column=0)
-            
-            # Rounds text
-            self.round_text = Label(self.round_testing, text="Round {}".format(questions_played+1), bg=background_color,
-                                font="Arial 13 bold",
-                               justify=LEFT, padx=10, pady=10)
-            self.round_text.grid(row=1, column=0) 
-
-            # Testing text (flag/country)
-            self.flag = Label(self.round_testing, text="Flag", bg=background_color,
-                              font="Arial 17 bold",
-                              padx=10, pady=10)
-            self.flag.grid(row=2, column=0)
-
-            self.country = Button(self.round_testing, text="Country",
-                                  font="Arial 12 bold",
-                                  bg="#FFFF00",
-                                  borderwidth=2,
-                                  width=15)
-            self.country.grid(row=3, column=0, padx=10, pady=10)
+        # setup Heading
+        self.rounds_heading = Label(self.round_testing, text="Testing",
+                                    font="arial 20 bold", bg=background_color,
+                                    padx=10, pady=10)
+        self.rounds_heading.grid(row=0, column=0)
         
-        questions_played += 1
+        # Rounds text
+        self.round_text = Label(self.round_testing, text="Round 1", bg=background_color,
+                            font="Arial 13 bold",
+                            justify=LEFT, padx=10, pady=10)
+        self.round_text.grid(row=1, column=0) 
+
+        # Testing text (flag/country)
+        self.flag = Label(self.round_testing, text="Flag", bg=background_color,
+                            font="Arial 17 bold",
+                            padx=10, pady=10)
+        self.flag.grid(row=2, column=0)
+
+        self.country = Button(self.round_testing, text="Country",
+                                font="Arial 12 bold",
+                                bg="#FFFF00",
+                                borderwidth=2,
+                                width=15)
+        self.country.grid(row=3, column=0, padx=10, pady=10)
+    
     
     def close_round_testing(self,  partner):
         partner.expert_button.config(state=NORMAL)
