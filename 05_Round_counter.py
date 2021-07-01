@@ -57,20 +57,12 @@ class Rounds:
         partner.expert_button.config(state=DISABLED)
 
         # Sets up child window
-        self.easy_box = Toplevel()
+        self.round_box = Toplevel()
 
-        # Sets up child window
-        self.expert_box = Toplevel()
-        
-        self.easy_box.protocol('WM_DELETE_WINDOW', partial(self.close_rounds, partner))
+        self.round_box.protocol('WM_DELETE_WINDOW', partial(self.close_rounds, partner))
 
-        self.expert_box.protocol('WM_DELETE_WINDOW', partial(self.close_rounds, partner))
-
-        # Set up Round GUI Frame
-        self.round_frame = Frame(self.easy_box, bg=background_color)
-        self.round_frame.grid()
-
-        self.round_frame = Frame(self.expert_box, bg=background_color)
+        # Setup up GUI Frame
+        self.round_frame = Frame(self.round_box, bg=background_color)
         self.round_frame.grid()
 
         # Set up Round Counter heading
@@ -95,7 +87,7 @@ class Rounds:
         # Entry Box goes here (row 2)
         self.enter_rounds = Entry(self.enter_check,
                                   font="Arial 15 bold", width=10)
-        self.enter_rounds.grid(row=2, column=0, padx=5, sticky="w")
+        self.enter_rounds.grid(row=2, column=0, padx=8, sticky="w")
 
         # check button goes here (row 2)
         self.check_button = Button(self.enter_check, text="Check",
@@ -121,7 +113,7 @@ class Rounds:
                                   width=14,
                                   command=self.to_game)
         self.play_button.grid(row=4, column=0, padx=5, pady=10)
-
+        self.play_button.config(state=DISABLED)
 
 
     def round_checker(self):
@@ -163,7 +155,8 @@ class Rounds:
             self.play_error.config(text=error_feedback)
         else:
             self.round_amount.set(amount_entered)
-
+            print(amount_entered)
+    
     def to_game(self):
 
         # Retrive round amount
@@ -177,11 +170,10 @@ class Rounds:
     def close_rounds(self, partner):
         partner.expert_button.config(state=NORMAL)
         partner.easy_button.config(state=NORMAL)
-        self.expert_box.destroy()
-        self.easy_box.destroy()
+        self.round_box.destroy()
 
 class Round_Testing:
-    def __init__(self, amount_entered, partner):
+    def __init__(self, partner):
 
         background_color = "#FFE6CC"
 
@@ -189,10 +181,6 @@ class Round_Testing:
         self.round_box = Toplevel()
 
         self.round_box.protocol('WM_DELETE_WINDOW', partial(self.close_round_testing, partner))
-
-        self.balance = IntVar()
-
-        self.balance.set(amount_entered)
 
 
         # Set up GUI Frame
@@ -205,6 +193,7 @@ class Round_Testing:
                                     padx=10, pady=10)
         self.rounds_heading.grid(row=0, column=0)
         
+ 
         # Rounds text
         self.round_text = Label(self.round_testing, text="Round 1", bg=background_color,
                             font="Arial 13 bold",
@@ -221,13 +210,21 @@ class Round_Testing:
                                 font="Arial 12 bold",
                                 bg="#FFFF00",
                                 borderwidth=2,
-                                width=15)
+                                width=15,
+                                command=self.next)
         self.country.grid(row=3, column=0, padx=10, pady=10)
     
-    
-    def close_round_testing(self,  partner):
-        partner.expert_button.config(state=NORMAL)
-        partner.easy_button.config(state=NORMAL)
+    def next(self):
+        questions_played = self.round_amount.get()
+
+        while self.round_amount.get():
+        
+        next_round = amount_entered.get()
+
+        self.round_text.config(text=next_round)
+
+
+    def close_round_testing(self, partner):
         self.round_box.destroy()
 
 # main routine
