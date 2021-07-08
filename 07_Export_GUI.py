@@ -1,5 +1,5 @@
-# Component 6
-# Game Statistics GUI
+# Comonent 7
+# Export GUI
 
 from tkinter import *
 from functools import partial  # To prevent unwanted windows
@@ -81,8 +81,8 @@ class Main:
         
         if hint_id == 1:
           hints + 1
-      
-      hints += 1
+          self.hints_used.set(hints)
+        hints += 1
       
       print(hints)
       
@@ -253,7 +253,8 @@ that you played.'''
                                     font="Arial 12 bold",
                                     bg="#FF9933",
                                     borderwidth=2,
-                                    width=8)
+                                    width=8,
+                                    command=lambda:self.export(game_stats, mode_used))
         self.export_button.grid(row=0, column=1, padx=5, pady=5)
 
         # Dismiss Button
@@ -272,6 +273,134 @@ that you played.'''
         partner.easy_button.config(state=NORMAL)
         partner.expert_button.config(state=NORMAL)
         self.stats_box.destroy()
+
+    def export(self, game_stats, mode_used):
+        Export(self, game_stats, mode_used)
+
+class Export:
+    def __init__(self, partner, game_stats, mode_used):
+
+        # Set background color to a specific color at the start to avoid confusion
+        background_color = "#FFE6CC"
+
+        # Sets up child window (ie: export box)
+        self.export_box = Toplevel()
+
+        # if users press cross at top, closes export 
+        self.export_box.protocol('WM_DELETE_WINDOW', partial(self.close_export, partner))
+
+        # Setup GUI Frame
+        self.export_frame = Frame(self.export_box, bg=background_color)
+        self.export_frame.grid()
+
+        # Set up export heading (row 0)
+        self.export_heading = Label(self.export_frame, text="Export...",
+                                    font="arial 20 bold", bg=background_color,
+                                    padx=10, pady=5)
+        self.export_heading.grid(row=0, column=0)
+
+        export_text = '''Please enter your desired filename below. 
+your game statistics will be exported as a .txt file and will 
+apear in the same folder as this program.'''
+
+        # Export GUi instructions label
+        self.export_instructions = Label(self.export_frame,
+                                         bg=background_color,
+                                         text=export_text,
+                                         font="arial 11 bold",
+                                         fg="#00994D",
+                                         padx=10, pady=5)
+        self.export_instructions.grid(row=1, column=0)
+
+        # Filename Entry Box (row 2)
+        self.filename_entry = Entry(self.export_frame, width=20,
+                                    font="Arial 14 bold", justify=CENTER)
+        self.filename_entry.grid(row=2, column=0)
+
+        # Error message label (row 3)
+        self.save_error = Label(self.export_frame, bg=background_color, text="", fg="maroon")
+        self.save_error.grid(row=3)
+
+        # Save / Cancel Frame (row 4)
+        self.save_cancel = Frame(self.export_frame, bg=background_color)
+        self.save_cancel.grid(row=4, pady=10)
+
+        # Save button goes here...
+        self.save_button = Button(self.save_cancel, text="Save",
+                                  font="Arial 12 bold",
+                                  bg="#00CC00",
+                                  borderwidth=2,
+                                  width=8)
+        self.save_button.grid(row=4, column=0, padx=5, pady=5)
+
+        # Cancel Button goes here...
+        self.cancel_button = Button(self.save_cancel, text="Cancel",
+                                    font="Arial 12 bold",
+                                    bg="#CC0000",
+                                    borderwidth=2,
+                                    width=8,
+                                    command=partial(self.close_export, partner))
+        self.cancel_button.grid(row=4, column=1)
+
+    def save_history(self, partner, game_stats, mode_used):
+
+      # Regular expression to check filename is valid
+      valid_char = "[A-Za-z0-9_]"
+      
+      # Assumes there are no errors at the start
+      has_errors="no"
+
+      filename = self.filename_entry.get()
+      print(filename)
+
+      for letter in filename:
+        if re.match(valid_char, letter):
+          continue
+
+        elif letter == " ":
+          problem = "(no spaces allowed)"
+
+        else:
+            problem = ("no {}'s allowed".format(letter))
+        has_errors = "yes"
+        break
+
+      if filename == "":
+        problem = "Can't be blank"
+        has_errors = "yes"
+
+      if has_errors == "yes":
+        # Display error message
+        self.save_error.config(text="Invalid filename - {}".format(problem))
+        # Change entry box to pink/red
+        self.filename_entry.config(bg="#ffafaf")
+        print()
+      
+      else:
+          # add.txt suffix
+          filename = filename + ".txt"
+
+          # create file to hold data
+          f = open(filename, "w+")
+
+          # Heading for stats
+          f.write("Game statistics\n\n")
+
+          # Game Stats
+
+          # <COMING SOOON>
+
+          # Heading for rounds
+          f.write("\nRound Details\n\n")
+          
+          # 
+
+
+  
+    def close_export(self, partner):
+        # Put export button back to normal
+        partner.export_button.config(state=NORMAL)
+        self.export_box.destroy()
 
 # main routine
 if __name__ == "__main__":
