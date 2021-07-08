@@ -1,3 +1,6 @@
+# Component 2
+# Help GUI
+
 from tkinter import *
 from functools import partial  # To prevent unwanted windows
 import re

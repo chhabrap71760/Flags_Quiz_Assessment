@@ -144,8 +144,9 @@ class Rounds:
 
             elif amount_entered > 0:
                 self.play_button.config(state=NORMAL)
-        
-            
+                error_feedback = "You may click play or press <enter>"
+    
+
         except ValueError:
             has_errors = "yes"
             error_feedback = "TEXT/DECIMALS ARE NOT VALID"
@@ -154,15 +155,16 @@ class Rounds:
             self.enter_rounds.config(bg=error_back)
             self.play_error.config(text=error_feedback)
         else:
+            self.play_error.config(text=error_feedback)
+            self.play_error.config(fg="#00CC00")
             self.round_amount.set(amount_entered)
             print(amount_entered)
     
+
     def to_game(self):
 
-        # Retrive round amount
-        amount_entered = self.round_amount.get()
 
-        Round_Testing(self, amount_entered)
+        Round_Testing(self)
 
         # hide start up window
         self.round_frame.destroy()
@@ -174,6 +176,9 @@ class Rounds:
 
 class Round_Testing:
     def __init__(self, partner):
+
+        self.rounds = IntVar()
+        self.rounds.set(0)
 
         background_color = "#FFE6CC"
 
@@ -195,10 +200,15 @@ class Round_Testing:
         
  
         # Rounds text
-        self.round_text = Label(self.round_testing, text="Round 1", bg=background_color,
+        self.round_text = Label(self.round_testing, text="Round:", bg=background_color,
                             font="Arial 13 bold",
                             justify=LEFT, padx=10, pady=10)
         self.round_text.grid(row=1, column=0) 
+
+        self.round_text2 = Label(self.round_testing, text="Round", bg=background_color,
+                            font="Arial 13 bold",
+                            justify=LEFT, padx=10, pady=10)
+        self.round_text2.grid(row=1, column=0) 
 
         # Testing text (flag/country)
         self.flag = Label(self.round_testing, text="Flag", bg=background_color,
@@ -215,14 +225,13 @@ class Round_Testing:
         self.country.grid(row=3, column=0, padx=10, pady=10)
     
     def next(self):
-        questions_played = self.round_amount.get()
+       
+       self.rounds.get()
 
-        while self.round_amount.get():
-        
-        next_round = amount_entered.get()
+       self.rounds.set(+1)
 
-        self.round_text.config(text=next_round)
-
+       rounds = self.rounds.get()
+       print(rounds)
 
     def close_round_testing(self, partner):
         self.round_box.destroy()

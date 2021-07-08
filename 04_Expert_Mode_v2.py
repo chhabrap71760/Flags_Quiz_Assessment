@@ -68,11 +68,17 @@ class Expert:
                                  padx=10, pady=10)
         self.expert_heading.grid(row=0, column=0,)
 
-        # expert Text (label, row 1)
+        # round Text (label, row 2)
         self.round_text = Label(self.expert_frame, text="Round 1", bg=background_color,
                                 font="Arial 13 bold",
                                justify=LEFT, padx=10, pady=10)
         self.round_text.grid(row=2, column=0) 
+
+        # start Text (label, row 4)
+        self.start_text = Label(self.expert_frame, text="PRESS ENTER TO START", bg=background_color,
+                                font="Arial 14 bold",
+                               justify=LEFT, padx=10)
+        self.start_text.grid(row=4, column=0) 
 
         # set image to a question mark img just to get things started
         image_to_use = "question_mark2.gif"
@@ -92,12 +98,13 @@ class Expert:
 
         # Answer Entry Box frame goes here (row 3)
         self.entry_hint = Frame(self.expert_frame, bg=background_color)
-        self.entry_hint.grid(row=3, pady=15)
+        self.entry_hint.grid(row=3, pady=5)
 
         # Entry Box goes here (row 3)
         self.enter_answer = Entry(self.entry_hint,
-                                  font="Arial 15 bold", width=13)
+                                  font="Arial 15 bold", width=15)
         self.enter_answer.grid(row=3, column=0)
+        self.enter_answer.config(state=DISABLED)
 
         # Check Button goes here (row 3)
         self.check_button = Button(self.entry_hint, text="Check",
@@ -150,7 +157,7 @@ class Expert:
 
         # Help/Stats Frame goes here
         self.help_stats_frame = Frame(self.expert_frame, bg=background_color)
-        self.help_stats_frame.grid(row=5, pady=15)
+        self.help_stats_frame.grid(row=5, pady=5)
 
         # Help and stats buttons go here (row 5)
         self.help_button = Button(self.help_stats_frame, text="Help",
@@ -170,7 +177,7 @@ class Expert:
 
         # Help/Stats Frame goes here
         self.next_quit_frame = Frame(self.expert_frame, bg=background_color)
-        self.next_quit_frame.grid(row=6, pady=10)
+        self.next_quit_frame.grid(row=6, pady=5)
         
         # Next button goes here (row 6)
         self.next_button = Button(self.next_quit_frame, text="Next",
@@ -181,6 +188,12 @@ class Expert:
                                   command=self.next)
         self.next_button.grid(row=6, column=1, padx=10, sticky="e")
 
+        # binds the entry to <enter> button to reduce user hastle
+        self.enter_answer.bind('<Return>', lambda e: self.answer())
+
+        self.next_button.focus()
+        self.next_button.bind('<Return>', lambda e: self.next())
+
         # Quit Button goes here (row 6)
         self.quit = Button(self.next_quit_frame, text="Quit",
                            bg="#CC0000", font="Arial 12 bold", 
@@ -190,7 +203,7 @@ class Expert:
 
 
 # Next function for when user wants to go to next question
-# This code hsa the main generation for flag and country
+#  - This code is the the main generation for flag and country
 # Where it accesses it from the csv file
     
     def next(self):
@@ -204,7 +217,15 @@ class Expert:
         self.entry_correct.config(text=" ")
         self.correct_country.config(text=" ")
         self.correct_country1.config(text=" ")
+        self.enter_answer.config(state=NORMAL)
+        self.start_text.config(text=" ")
+
+        # Clear the entry box so that user does not need to clear it every time
+        self.enter_answer.delete(0, END)
         
+        # focuses on the entry box from the start so user doesn't need to do it themselves
+        self.enter_answer.focus()
+
         # Here is where the code accesses the csv file
         with open("country_flags.csv") as f: 
             
@@ -238,31 +259,37 @@ class Expert:
         self.hint_button.config(state=DISABLED)
         self.hint_label1.config(text=" ")
         self.check_button.config(state=DISABLED)
+
+        # retrieves the answer that the user enters
         answer_entered = self.enter_answer.get()
         
+
         # takes in the correct_answer StrVar from the 'next' function
         chosen_country = self.correct_ans.get()
-        
+       
+
         # Correct feedback randomly generates 
         correct = ["Bravo! you got it right", "Awesome keep it up", "Excellent Work",
-         "You're Great", "Outstanding"]
+         "You're Great", "Outstanding", "Good Job"]
 
         # Incorrect feedback randomly generates
         incorrect = ["C'mon, you can do better than that", "Nope, try harder on the next one",
-        "oops, you messed up there"]
+        "oops, you messed up there", "Keep Trying", "Nice try"]
 
         correct = random.choice(correct)
         incorrect = random.choice(incorrect)
 
+        # assumes there are no errors at the start
         has_errors = "no"
  
     # If statement for checking user input and sending a valid response
         
         # If user gets it right
-        if answer_entered == chosen_country:                
+        if answer_entered == chosen_country:             
             has_errors = "no"
             correct_feedback = correct
             self.entry_error.config(text=" ")
+            self.next_button.focus()
 
         # if user does not type anything
         elif answer_entered == "":
@@ -276,23 +303,29 @@ class Expert:
             has_errors = "yes"
             error_feedback = incorrect
             correct_country = chosen_country
+            self.next_button.focus()
 
         if has_errors == "yes":
             self.entry_error.config(text=error_feedback)
             self.correct_country.config(text="Answer:")
             self.correct_country1.config(text=correct_country)
+            self.enter_answer.config(state=DISABLED)
 
         if has_errors == "blank":
             self.entry_error.config(text=error_feedback)
 
         elif has_errors == "no":
             self.entry_correct.config(text=correct_feedback)
+            self.enter_answer.config(state=DISABLED)
 
 
 # Hints function goes here..
 # very short code because hint is set to a StrVar in the beginning
 # This makes it conveniant and saves a lot of lines of code
     def hints(self):
+
+        # disables hint button
+        self.hint_button.config(state=DISABLED)
 
         # Retrieves the StrVar value
         get_hint = self.hint.get()
