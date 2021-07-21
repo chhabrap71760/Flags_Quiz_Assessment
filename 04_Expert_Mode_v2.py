@@ -219,6 +219,7 @@ class Expert:
         self.correct_country1.config(text=" ")
         self.enter_answer.config(state=NORMAL)
         self.start_text.config(text=" ")
+        self.next_button.config(state=DISABLED)
 
         # Clear the entry box so that user does not need to clear it every time
         self.enter_answer.delete(0, END)
@@ -259,10 +260,14 @@ class Expert:
         self.hint_button.config(state=DISABLED)
         self.hint_label1.config(text=" ")
         self.check_button.config(state=DISABLED)
+        self.hint_button.config(state=DISABLED)
+        self.next_button.config(state=NORMAL)
 
         # retrieves the answer that the user enters
         answer_entered = self.enter_answer.get()
         
+        # converts the entry so that first letter for each word is capital
+        answer_entered = answer_entered.title()
 
         # takes in the correct_answer StrVar from the 'next' function
         chosen_country = self.correct_ans.get()

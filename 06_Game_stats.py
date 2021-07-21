@@ -11,8 +11,12 @@ import csv
 class Main:
     def __init__(self):
 
-        # Formatting Variables...
+        # sets a hard coded list
         self.game_stats_list = [10, 10, 20]
+
+        # set the amount of times hint button is pressed for later use
+        self.hints_used = IntVar()
+        self.hints_used.set(0)
 
         # Set the background color in the beginning
         background_color = "#FFE6CC"
@@ -57,12 +61,10 @@ class Main:
                                   bg="#FFFF00",
                                   borderwidth=2,
                                   width=8,
-                                  command=lambda: self.hints(1))
+                                  command=self.hints)
         self.hint_button.grid(row=5, column=0, padx=15)
         self.hint_button.config(state=DISABLED)
 
-        self.hints_used = IntVar()
-        self.hints_used.set(0)
 
         # stats button goes here... (row 5)
         self.stats_button = Button(self.main_frame, text="Stats",
@@ -73,46 +75,56 @@ class Main:
         self.stats_button.grid(row=5, column=1, columnspan=4, pady=10)  
         self.stats_button.config(state=DISABLED)
 
-    def hints(self, hint_id):
+    # hint function for when the user clicks the hint button
+    def hints(self):
       
+      # retrieve the amount of times the user clicks the hint button 
       hints = self.hints_used.get()
-      
-      while hints: 
-        
-        if hint_id == 1:
-          hints + 1
-      
+
+      # Adds 1 number to the amount of times the hint button is pressed
       hints += 1
-      
-      print(hints)
+      self.hints_used.set(hints)
       
 
+  # this function is used for saving which mode was used in the game
     def which_button(self, mode_id):
 
+      # user clicks the easy mode button
       if mode_id == 1:
+        
+        # enables stats and disables expert button
         self.stats_button.config(state=NORMAL)
         self.expert_button.config(state=DISABLED)
+        
+        # Set the mode selected as the StringVar to display in stats GUI
         mode = self.easy_button['text']
         print(mode)
         self.mode_selected.set(mode)
 
+      # user clicks expert mode
       else:
+        # Enables the stats and hint buttons, disables the easy button
         self.stats_button.config(state=NORMAL)
         self.easy_button.config(state=DISABLED)
         self.hint_button.config(state=NORMAL)
+        
+        # Set the mode selected as the StringVar to display in stats GUI
         mode = self.expert_button['text']
         print(mode)
         self.mode_selected.set(mode)
 
         
     def gamestats(self, game_stats):
-        mode_used = self.mode_selected.get()
         
-        Gamestats(self, mode_used, game_stats)
+        # Retrive the mode used and amount of times the 
+        mode_used = self.mode_selected.get()
+        hints_used = self.hints_used.get()
+
+        Gamestats(self, mode_used, game_stats, hints_used)
 
 # Game Stats Class goes here...
 class Gamestats:
-    def __init__(self, partner, mode_used, game_stats):
+    def __init__(self, partner, mode_used, game_stats, hints_used):
 
         # Set background color to a specific color at the start to avoid confusion
         background_color = "#FFE6CC"
@@ -123,8 +135,7 @@ class Gamestats:
         # Sets up child window (ie: stats box)
         self.stats_box = Toplevel()
 
-        # If user press cross at top, closes help and 'releases' help button
-
+        # If user press cross at top, closes stats 
         self.stats_box.protocol('WM_DELETE_WINDOW', partial(self.close_stats, partner))
 
         # Set up GUI Frame
@@ -137,9 +148,10 @@ class Gamestats:
                                     padx=10, pady=5)
         self.stats_heading.grid(row=0, column=0,)
 
+        # stats text variable goes here...
         stats_text = '''Here are your game statistics. You may use the 
-Export button to access the results of each round 
-that you played.'''
+Export button to save these statistics into a 
+.txt file'''
 
 
         # Game statistics Instructions
@@ -200,6 +212,7 @@ that you played.'''
         self.incorrect_answers2.grid(row=2, column=1, pady=5, padx=5)
 
         # Hints used label (row 3)
+
         self.hints_used = Label(self.details_frame,
                                     text="Hints Used:",
                                     font="arial 12 bold", bg=background_color,
@@ -207,6 +220,11 @@ that you played.'''
         self.hints_used.grid(row=3, column=0, pady=5, padx=5)
 
         # Hints used label (row 3.5)
+        self.hints_used2 = Label(self.details_frame,
+                                text="{}".format(hints_used),
+                                font="arial 13 bold", bg=background_color,
+                                anchor="e")
+        self.hints_used2.grid(row=3, column=1, pady=5, padx=5)
 
         # Games played label (row 4)
         self.games_played = Label(self.details_frame, text="Games played:",
@@ -221,6 +239,7 @@ that you played.'''
                                     anchor="e")
         self.games_played2.grid(row=4, column=1, pady=5, padx=5)
 
+        # Calculates the percentage 
         percentage = game_stats[0] / game_stats[2] * 100
 
         # Total Score label (row 5)

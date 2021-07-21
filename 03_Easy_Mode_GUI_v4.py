@@ -192,7 +192,7 @@ class Easy:
                                   command=partial(self.close_easy, partner))
         self.quit.grid(row=6, column=0, padx=10, pady=5)
 
-
+        # Focuses on the next button in the beginning so the user can press enter to start
         self.next_button.focus()
         self.next_button.bind('<Return>', lambda e: self.next())
 
@@ -304,6 +304,8 @@ class Easy:
 
         # assumes there are no errors at the start 
         has_errors = "no"
+
+    # If statement for checking user input and sending a valid response
 
         # If user gets it right
         if answer_entered == chosen_country:                
