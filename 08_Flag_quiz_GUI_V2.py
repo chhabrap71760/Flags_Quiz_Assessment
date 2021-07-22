@@ -33,7 +33,7 @@ class Rounds:
         self.round_heading.grid(row=0, column=0, sticky="nw")
 
         # Round text variable
-        rounds_text = "Enter the amount of question you'd like to play"
+        rounds_text = "Enter the amount of questions you'd like to play"
 
         # Set up Round Counter text
         self.rounds_text = Label(self.round_frame, text=rounds_text, 
