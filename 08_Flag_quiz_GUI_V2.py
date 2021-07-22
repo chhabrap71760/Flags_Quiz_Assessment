@@ -27,13 +27,13 @@ class Rounds:
         self.round_frame.grid()
 
         # Set up Round Counter heading
-        self.round_heading = Label(self.round_frame, text="Round Counter",
+        self.round_heading = Label(self.round_frame, text="Question Counter",
                                  font="arial 16 bold", bg=background_color,
                                  padx=10)
         self.round_heading.grid(row=0, column=0, sticky="nw")
 
         # Round text variable
-        rounds_text = "Enter the amount of rounds you'd like to play"
+        rounds_text = "Enter the amount of question you'd like to play"
 
         # Set up Round Counter text
         self.rounds_text = Label(self.round_frame, text=rounds_text, 
@@ -327,7 +327,7 @@ class Easy:
         self.easy_heading.grid(row=0, column=0,)
 
         # Rounds Text
-        self.round_text = Label(self.easy_frame, text="Round:", bg=background_color,
+        self.round_text = Label(self.easy_frame, text="Question:", bg=background_color,
                                 font="Arial 13 bold",
                                justify=LEFT, padx=10, pady=10)
         self.round_text.grid(row=2, column=0) 
@@ -358,7 +358,8 @@ class Easy:
                                 font="Arial 12 bold",
                                 bg = "#E6E6E6",
                                 borderwidth = 2,
-                                width=15,
+                                width=18,
+                                wrap=200,
                                 command=lambda: self.answer(1))
         self.country_1.grid(row=3, column=0, padx=5, pady=5)
         self.country_1.config(state=DISABLED)
@@ -367,7 +368,8 @@ class Easy:
                                 font="Arial 12 bold",
                                 bg = "#E6E6E6",
                                 borderwidth = 2,
-                                width=15,
+                                width=18,
+                                wrap=200,
                                 command=lambda: self.answer(2))
         self.country_2.grid(row=3, column=1, padx=5, pady=5)
         self.country_2.config(state=DISABLED)
@@ -376,7 +378,8 @@ class Easy:
                                 font="Arial 12 bold",
                                 bg = "#E6E6E6",
                                 borderwidth = 2,
-                                width=15,
+                                width=18,
+                                wrap=200,
                                 command=lambda: self.answer(3))
         self.country_3.grid(row=4, column=0, padx=5, pady=5)
         self.country_3.config(state=DISABLED)
@@ -385,7 +388,8 @@ class Easy:
                                 font="Arial 12 bold",
                                 bg = "#E6E6E6",
                                 borderwidth = 2,
-                                width=15,
+                                width=18,
+                                wrap=200,
                                 command=lambda: self.answer(4))
         self.country_4.grid(row=4, column=1, padx=5, pady=5)
         self.country_4.config(state=DISABLED)
@@ -475,7 +479,7 @@ class Easy:
         self.rounds_played.set(rounds)
 
         # Display it in the GUI
-        rounds_text = "Round: {}".format(rounds)
+        rounds_text = "Question: {}".format(rounds)
         self.round_text.config(text=rounds_text)
 
 
@@ -521,13 +525,16 @@ class Easy:
         # Create master list for the multiple choices
         list_of_countries = []
 
-        for item in range(0,3):
+       # generates 3 random countries 
+        while len(list_of_countries) < 3:
             options = random.choice(flag_list)
             country_option = []
             country_option = options[0]
 
-            # Add the three countries to the list
-            list_of_countries.append(country_option)
+            # Checks if there are no duplicates if not then it
+            # Adds the three countries to the list
+            if country_option not in list_of_countries:
+                list_of_countries.append(country_option)
         
         # Add the answer to the list as well
         flag_answer = chosen_country[0]
@@ -639,6 +646,10 @@ class Easy:
 
     def gamestats(self, game_stats):
 
+        # binds the quit button to <enter> button to reduce user hastle
+        self.quit.bind('<Return>', lambda e: self.close_easy())
+        
+
         # focuses on the quit button after it opens stats so that user
         # cannot go back into easy mode and click enter again for stats
         self.quit.focus()
@@ -659,6 +670,13 @@ class Easy:
         Gamestats(self, mode_used, game_stats, hints_used)
 
     def close_easy(self):
+
+        # Retrive the amount entered by the user
+        amount_entered = self.round_end.get()
+
+        Main(self, amount_entered)
+        
+        # hides easy mode window
         self.easy_box.destroy()
 
     def help(self):
@@ -719,7 +737,7 @@ class Expert:
         self.expert_heading.grid(row=0, column=0,)
 
         # round Text (label, row 2)
-        self.round_text = Label(self.expert_frame, text="Round:", bg=background_color,
+        self.round_text = Label(self.expert_frame, text="Question:", bg=background_color,
                                 font="Arial 13 bold",
                                justify=LEFT, padx=10, pady=10)
         self.round_text.grid(row=2, column=0) 
@@ -869,7 +887,7 @@ class Expert:
         self.rounds_played.set(rounds)
         
         # Display it in the GUI
-        rounds_text = "Round: {}".format(rounds)
+        rounds_text = "Question: {}".format(rounds)
         self.round_text.config(text=rounds_text)
 
 
@@ -933,7 +951,7 @@ class Expert:
         self.check_button.config(state=DISABLED)
         self.hint_button.config(state=DISABLED)
         self.next_button.config(state=NORMAL)
-        self.stats_button.config(state=DISABLED)
+        #self.stats_button.config(state=DISABLED)
 
         # retrieves the answer that the user enters
         answer_entered = self.enter_answer.get()
@@ -948,6 +966,8 @@ class Expert:
         # Correct feedback randomly generates 
         correct = ["Bravo! you got it right", "Awesome keep it up", "Excellent Work",
          "You're Great", "Outstanding", "Good Job"]
+
+        correct_feedback = ""
 
         # Incorrect feedback randomly generates
         incorrect = ["C'mon, you can do better than that", "Nope, try harder on the next one",
@@ -966,21 +986,28 @@ class Expert:
 
     # If statement for checking user input and sending a valid response
         
+
+        # if user does not type anything
+        if answer_entered == "":
+            has_errors = "blank"
+            error_feedback="Please enter a Country"
+            self.check_button.config(state=NORMAL)
+            self.hint_button.config(state=NORMAL)
+            self.start_text.config(text="")
+            self.entry_error.config(text=error_feedback)
+            self.next_button.config(state=DISABLED)
+           # self.stats_button.config(state=DISABLED)
+            self.enter_answer.config(state=NORMAL)
+            
         # If user gets it right
-        if answer_entered == chosen_country:             
+        elif answer_entered == chosen_country:             
             has_errors = "no"
             correct_answers += 1
             self.correct_answers.set(correct_answers)
             correct_feedback = correct
             self.entry_error.config(text=" ")
             self.next_button.focus()
-
-        # if user does not type anything
-        elif answer_entered == "":
-            error_feedback="Please enter a Country"
-            self.check_button.config(state=NORMAL)
-            self.hint_button.config(state=NORMAL)
-            self.start_text.config(text="")
+           # self.enter_answer.config(state=DISABLED)
 
         # If user gets it wrong
         elif answer_entered != chosen_country:
@@ -990,6 +1017,7 @@ class Expert:
             error_feedback = incorrect
             correct_country = chosen_country
             self.next_button.focus()
+            #self.enter_answer.config(state=DISABLED)
 
         if has_errors == "yes":
             self.entry_error.config(text=error_feedback)
@@ -998,18 +1026,17 @@ class Expert:
             self.enter_answer.config(state=DISABLED)
            # self.stats_button.config(state=NORMAL)
 
-        
+
         elif has_errors == "no":
             self.entry_correct.config(text=correct_feedback)
             self.enter_answer.config(state=DISABLED)
             #self.stats_button.config(state=NORMAL)
+        
+        elif has_errors == "blank": 
+            self.start_text.config(text="")
+            #self.stats_button.config(state=DISABLED)
 
-        else:
-            self.entry_error.config(text=error_feedback)
-            self.next_button.config(state=DISABLED)
-            self.stats_button.config(state=DISABLED)
-
-            return
+        
 
         # binds the entry to <enter> button to reduce user hastle
         self.stats_button.bind('<Return>', lambda e: self.gamestats(self.game_stats_list))
@@ -1025,7 +1052,7 @@ class Expert:
             self.stats_button.focus()
 
         # enable the stats button after one round
-        if rounds > 1:
+        if rounds == 1:
             self.stats_button.config(state=NORMAL)
 
 # Hints function goes here..
@@ -1055,6 +1082,15 @@ class Expert:
 
     def gamestats(self, game_stats):
 
+        # binds the quit button to <enter> button to reduce user hastle
+        self.quit.bind('<Return>', lambda e: self.close_expert())
+        
+
+        # focuses on the quit button after it opens stats so that user
+        # cannot go back into easy mode and click enter again for stats
+        self.quit.focus()
+
+
         # Retrieve the amount of hints used
         hints_used = self.hints_used.get()
 
@@ -1068,6 +1104,14 @@ class Expert:
 
     # For when user decides to click quit 
     def close_expert(self):
+
+        # Retrive the amount entered by the user
+        amount_entered = self.round_end.get()
+
+        # leads to the main menu when user clicks quit
+        Main(self, amount_entered)
+        
+        # hides expert box
         self.expert_box.destroy()
 
 class Help:
@@ -1105,7 +1149,7 @@ class Help:
                        get the chance to view the capital city of that country as a hint
                        to help you out.
 
-                       After playing a couple games you can click the stats button
+                       After answering a couple questions you can click the stats button
                        and view your statistics of the rounds you've played. And if 
                        want you can also export it into a text file and save it onto 
                        your device so you can brag to your friends and family. 
@@ -1233,7 +1277,7 @@ Export button to save these statistics into a
         self.hints_used2.grid(row=3, column=1, pady=5, padx=5)
 
         # Games played label (row 4)
-        self.games_played = Label(self.details_frame, text="Games played:",
+        self.games_played = Label(self.details_frame, text="Questions played:",
                                        font="arial 12 bold", bg=background_color,
                                        anchor="w")
         self.games_played.grid(row=4, column=0, pady=5, padx=5)
@@ -1457,11 +1501,11 @@ apear in the same folder as this program.'''
           f.write("--------------------------------------------\n")
           f.write("-----          GAME STATISTICS         -----\n")
           f.write("--------------------------------------------\n")
-          f.write("---|  Mode Used:     |\t {}\t\t|---\n".format(mode_used))
-          f.write("---|  Correct:       |\t\t {} \t\t\t|---\n".format(game_stats[0]))
-          f.write("---|  Incorrect:     |\t\t {} \t\t\t|---\n".format(game_stats[1]))
-          f.write("---|  Hints Used:    |\t\t {} \t\t\t|---\n".format(hints_used))
-          f.write("---| Games Played:   |\t\t {} \t\t\t|---\n".format(game_stats[2]))
+          f.write("---|  Mode Used:     |\t {}\t|---\n".format(mode_used))
+          f.write("---|  Correct:       |\t\t {} \t\t|---\n".format(game_stats[0]))
+          f.write("---|  Incorrect:     |\t\t {} \t\t|---\n".format(game_stats[1]))
+          f.write("---|  Hints Used:    |\t\t {} \t\t|---\n".format(hints_used))
+          f.write("---| Questions Played:   |\t\t {} \t\t|---\n".format(game_stats[2]))
           f.write("--------------------------------------------\n")
           f.write("----------------|  {:.0f} %  |------------------\n".format(percentage))
           f.write("\n")
