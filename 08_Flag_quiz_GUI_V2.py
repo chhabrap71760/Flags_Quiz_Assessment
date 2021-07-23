@@ -230,6 +230,14 @@ class Main:
                                   command=self.help)
         self.help_button.grid(row=5, column=0)  
 
+         # quit button goes here (row 6)
+        self.quit = Button(self.main_frame, text="QUIT",
+                                  font="Arial 10 bold",
+                                  bg="#E00000",
+                                  borderwidth=2,
+                                  width=7,
+                                  command=partial(self.close_main, partner))
+        self.quit.grid(row=6, column=0, padx=10, pady=10)
 
 
     def easy(self):
@@ -271,8 +279,8 @@ class Main:
         Help(self)
     
     def close_main(self, partner):
-        self.main_box.destroy()
-       # partner.play_button.config(state=NORMAL)
+        root.destroy()
+        
 
 
 # Easy Class goes here...
@@ -1483,6 +1491,15 @@ apear in the same folder as this program.'''
           # disable save button so that user does not save another file
           self.save_button.config(state=DISABLED)
 
+          # disable entry box
+          self.filename_entry.config(state=DISABLED)
+
+        # Binds the cancel to <enter> to make it easier for the user
+          self.cancel_button.bind('<Return>', lambda e: self.close_export(partner))
+
+        # focuses on the cancel button so user can press enter
+          self.cancel_button.focus()
+
           # change the color of the error message
           self.save_error.config(fg="#00CC00")
 
@@ -1501,11 +1518,11 @@ apear in the same folder as this program.'''
           f.write("--------------------------------------------\n")
           f.write("-----          GAME STATISTICS         -----\n")
           f.write("--------------------------------------------\n")
-          f.write("---|  Mode Used:     |\t {}\t|---\n".format(mode_used))
-          f.write("---|  Correct:       |\t\t {} \t\t|---\n".format(game_stats[0]))
-          f.write("---|  Incorrect:     |\t\t {} \t\t|---\n".format(game_stats[1]))
-          f.write("---|  Hints Used:    |\t\t {} \t\t|---\n".format(hints_used))
-          f.write("---| Questions Played:   |\t\t {} \t\t|---\n".format(game_stats[2]))
+          f.write("---|  Mode Used:     |\t {} \t|---\n".format(mode_used))
+          f.write("---|  Correct:       |\t\t {} \t|---\n".format(game_stats[0]))
+          f.write("---|  Incorrect:     |\t\t {} \t|---\n".format(game_stats[1]))
+          f.write("---|  Hints Used:    |\t\t {} \t|---\n".format(hints_used))
+          f.write("---|Questions Played:|\t\t {} \t|---\n".format(game_stats[2]))
           f.write("--------------------------------------------\n")
           f.write("----------------|  {:.0f} %  |------------------\n".format(percentage))
           f.write("\n")
